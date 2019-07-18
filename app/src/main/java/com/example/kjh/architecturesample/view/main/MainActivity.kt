@@ -1,21 +1,21 @@
-package com.example.kjh.architecturesample
+package com.example.kjh.architecturesample.view.main
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kjh.architecturesample.R
 import com.example.kjh.architecturesample.adapter.ImageAdapter
 import com.example.kjh.architecturesample.data.ImageData
-import com.example.kjh.architecturesample.data.ImageItem
-import com.example.kjh.architecturesample.presenter.MainContract
-import com.example.kjh.architecturesample.presenter.MainPresenter
+import com.example.kjh.architecturesample.view.main.presenter.MainContract
+import com.example.kjh.architecturesample.view.main.presenter.MainPresenter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
-    private var imageAdapter: ImageAdapter? = null
+    private lateinit var imageAdapter: ImageAdapter
 
     private lateinit var presenter: MainPresenter
 
@@ -24,15 +24,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        presenter = MainPresenter().apply {
-            view = this@MainActivity
-            imageData = ImageData
-        }
-
         // Adapter 생성
         imageAdapter = ImageAdapter(this)
         // RecyclerView에 adapter를 셋팅
         rv_image_list.adapter = imageAdapter
+
+        presenter = MainPresenter().apply {
+            view = this@MainActivity
+            imageData = ImageData
+            adapterView = imageAdapter
+            adapterModel = imageAdapter
+        }
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -40,19 +42,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         presenter.loadItems(this, false)
-    }
-
-    override fun updateItems(items: ArrayList<ImageItem>, isClean: Boolean) {
-        imageAdapter?.apply {
-            if(isClean)
-                imageList?.clear()
-
-            imageList = items
-        }
-    }
-
-    override fun notifyAdapter() {
-        imageAdapter?.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
