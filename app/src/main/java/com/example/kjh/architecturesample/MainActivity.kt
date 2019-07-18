@@ -6,23 +6,31 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kjh.architecturesample.adapter.ImageAdapter
 import com.example.kjh.architecturesample.data.ImageData
+import com.example.kjh.architecturesample.data.ImageItem
+import com.example.kjh.architecturesample.presenter.MainContract
+import com.example.kjh.architecturesample.presenter.MainPresenter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainContract.View {
 
     private var imageAdapter: ImageAdapter? = null
+
+    private lateinit var presenter: MainPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        presenter = MainPresenter().apply {
+            view = this@MainActivity
+            imageData = ImageData
+        }
+
         // Adapter 생성
         imageAdapter = ImageAdapter(this)
-        // Adapter에 itemList를 불러와서 저장
-        imageAdapter?.imageList = ImageData.getSampleList(this, 10)
         // RecyclerView에 adapter를 셋팅
         rv_image_list.adapter = imageAdapter
 
@@ -30,6 +38,21 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
+        presenter.loadItems(this, false)
+    }
+
+    override fun updateItems(items: ArrayList<ImageItem>, isClean: Boolean) {
+        imageAdapter?.apply {
+            if(isClean)
+                imageList?.clear()
+
+            imageList = items
+        }
+    }
+
+    override fun notifyAdapter() {
+        imageAdapter?.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
