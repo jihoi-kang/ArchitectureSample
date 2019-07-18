@@ -3,6 +3,7 @@ package com.example.kjh.architecturesample.view.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kjh.architecturesample.R
 import com.example.kjh.architecturesample.adapter.ImageAdapter
@@ -58,18 +59,14 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         // reload 액션 발생
         if(id == R.id.action_reload) {
-            imageAdapter?.apply {
-                // 기존 itemList clear
-                imageList?.clear()
-                // 새로운 itemList 불러와서 저장
-                imageList = ImageData.getSampleList(context, 10)
-                // UI Change
-                notifyDataSetChanged()
-            }
+            presenter.loadItems(this, true)
             return true
         }
 
         return super.onOptionsItemSelected(item)
     }
 
+    override fun showToast(title: String) {
+        Toast.makeText(this, "OnClick Item $title", Toast.LENGTH_SHORT).show()
+    }
 }

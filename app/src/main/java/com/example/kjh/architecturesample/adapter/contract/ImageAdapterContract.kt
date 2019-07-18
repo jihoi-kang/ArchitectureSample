@@ -6,6 +6,7 @@ interface ImageAdapterContract {
 
     interface View {
 
+        var onClickFunc : ((Int) -> Unit)?
         fun notifyAdapter()
 
     }
@@ -14,6 +15,7 @@ interface ImageAdapterContract {
 
         fun addItems(imageList: ArrayList<ImageItem>)
         fun clearItem()
+        fun getItem(position: Int): ImageItem
 
     }
 

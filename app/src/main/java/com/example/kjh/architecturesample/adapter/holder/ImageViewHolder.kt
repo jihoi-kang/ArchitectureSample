@@ -8,10 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kjh.architecturesample.R
 import com.example.kjh.architecturesample.data.ImageItem
-import com.example.kjh.architecturesample.listener.OnItemClickListener
 import com.example.kjh.architecturesample.util.ImageAsync
 
-class ImageViewHolder(val context: Context, parent: ViewGroup?, val onItemClickListener: OnItemClickListener?)
+class ImageViewHolder(val context: Context, parent: ViewGroup?, val listenerFunc: ((Int) -> Unit)?)
     : RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_image, parent, false)) {
 
     private val ivImage by lazy {
@@ -28,7 +27,7 @@ class ImageViewHolder(val context: Context, parent: ViewGroup?, val onItemClickL
         tvTitle.text = item.title
 
         itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(position)
+            listenerFunc?.invoke(position)
         }
     }
 

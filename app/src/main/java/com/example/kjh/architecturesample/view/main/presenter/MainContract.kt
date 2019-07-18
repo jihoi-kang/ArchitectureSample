@@ -6,7 +6,11 @@ import com.example.kjh.architecturesample.data.ImageData
 
 interface MainContract {
 
-    interface View
+    interface View {
+
+        fun showToast(title: String)
+
+    }
 
     interface Presenter {
 
@@ -14,7 +18,7 @@ interface MainContract {
         var imageData: ImageData
 
         var adapterModel: ImageAdapterContract.Model
-        var adapterView: ImageAdapterContract.View
+        var adapterView: ImageAdapterContract.View?
 
         fun loadItems(context: Context, isClean: Boolean)
 
