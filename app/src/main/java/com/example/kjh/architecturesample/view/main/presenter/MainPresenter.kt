@@ -10,7 +10,11 @@ class MainPresenter : MainContract.Presenter {
     override lateinit var imageData: ImageData
 
     override lateinit var adapterModel: ImageAdapterContract.Model
-    override lateinit var adapterView: ImageAdapterContract.View
+    override var adapterView: ImageAdapterContract.View? = null
+        set(value) {
+            field = value
+            field?.onClickFunc = { onClickListener(it) }
+        }
 
     override fun loadItems(context: Context, isClean: Boolean) {
         imageData.getSampleList(context, 10).let {
@@ -18,9 +22,16 @@ class MainPresenter : MainContract.Presenter {
                 adapterModel.clearItem()
 
             adapterModel.addItems(it)
-            adapterView.notifyAdapter()
+            adapterView?.notifyAdapter()
 
         }
 
     }
+
+    private fun onClickListener(position: Int) {
+        adapterModel.getItem(position).let {
+            view.showToast(it.title)
+        }
+    }
+
 }
