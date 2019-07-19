@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kjh.architecturesample.R
 import com.example.kjh.architecturesample.adapter.ImageAdapter
-import com.example.kjh.architecturesample.data.ImageData
+import com.example.kjh.architecturesample.data.source.image.SampleImageRepository
 import com.example.kjh.architecturesample.view.main.presenter.MainContract
 import com.example.kjh.architecturesample.view.main.presenter.MainPresenter
 import com.google.android.material.snackbar.Snackbar
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         presenter = MainPresenter().apply {
             view = this@MainActivity
-            imageData = ImageData
+            imageData = SampleImageRepository
             adapterView = imageAdapter
             adapterModel = imageAdapter
         }
